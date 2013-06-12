@@ -1,6 +1,6 @@
 # NuoDB - Django
 
-[![Build Status](https://travis-ci.org/nuodb/nuodb-python.png?branch=master)](https://travis-ci.org/nuodb/nuodb-python)
+[![Build Status](https://travis-ci.org/nuodb/nuodb-django.png?branch=master)](https://travis-ci.org/nuodb/nuodb-django)
 
 This is the official Django adapter for [NuoDB](http://www.nuodb.com). It leverages the [NuoDB Python Driver](https://github.com/nuodb/nuodb-python).
 
@@ -10,7 +10,11 @@ If you haven't already, [Download and Install NuoDB](http://nuodb.com/download-n
 
 ### Setup
 
-1 - git clone https://github.com/nuodb/nuodb-sqlalchemy.git
+1 - git clone https://github.com/nuodb/nuodb-django.git
+
+or install with pip
+
+2 - pip install nuodb_django
 
 
 ### License
