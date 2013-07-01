@@ -71,9 +71,7 @@ class DatabaseOperations(BaseDatabaseOperations):
     def quote_name(self, name):
         if name.startswith('"') and name.endswith('"'):
             name = name.replace("\"", "\'")
-            print 'quoted name 1: %s' % name
             return name # Quoting once is enough.
-        print 'quoted name2: %s' % name
         return "'%s'" % name
 
     def set_time_zone_sql(self):

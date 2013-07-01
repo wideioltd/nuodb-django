@@ -28,11 +28,8 @@ class DatabaseIntrospection(BaseDatabaseIntrospection):
     def get_table_list(self, cursor):
         print 'get_table_list'
         "Returns a list of table names in the current database."
-        print 'cursor: %s' % cursor.execute
-        cursor.execute(""" SELECT tablename FROM system.tables """)
-        print 'get tabel list middle'
+        cursor.execute(str("SELECT tablename FROM system.tables"))
         results = [row[0] for row in cursor.fetchall()]
-        print 'get_table_list results: %s' % results
         return results
 
     def get_table_description(self, cursor, table_name):
