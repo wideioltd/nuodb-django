@@ -1,7 +1,7 @@
 """
-PostgreSQL database backend for Django.
+NuoDB database backend for Django.
 
-Requires psycopg 2: http://initd.org/projects/pynuodb
+Requires pynuodb: https://github.com/nuodb/nuodb-python
 """
 import logging
 import sys
@@ -107,11 +107,6 @@ class DatabaseWrapper(BaseDatabaseWrapper):
         self.features = DatabaseFeatures(self)
         autocommit = self.settings_dict["OPTIONS"].get('autocommit', False)
         self.features.uses_autocommit = autocommit
-#         if autocommit:
-#             level = pynuodb.extensions.ISOLATION_LEVEL_AUTOCOMMIT
-#         else:
-#             level = pynuodb.extensions.ISOLATION_LEVEL_READ_COMMITTED
-#         self._set_isolation_level(level)
         self.ops = DatabaseOperations(self)
         self.client = DatabaseClient(self)
         self.creation = DatabaseCreation(self)
@@ -128,7 +123,7 @@ class DatabaseWrapper(BaseDatabaseWrapper):
         self.cursor().execute('SET CONSTRAINTS ALL DEFERRED')
 
     def close(self):
-        self.validate_thread_sharing()
+#         self.validate_thread_sharing()
         if self.connection is None:
             return
 
@@ -150,6 +145,7 @@ class DatabaseWrapper(BaseDatabaseWrapper):
         if self._nuodb_version is None:
             self._nuodb_version = get_version(self.connection)
         return self._nuodb_version
+    
     nuodb_version = property(_get_nuodb_version)
 
     def _cursor(self):
@@ -178,9 +174,7 @@ class DatabaseWrapper(BaseDatabaseWrapper):
             tz = 'UTC' if settings.USE_TZ else settings_dict.get('TIME_ZONE')
 #             options['timezone'] = tz
             conn_params['options'] = options
-            print "connect params: %s" % conn_params 
             self.connection = Database.connect(**conn_params)
-#             self.connection.set_client_encoding('UTF8')
             if tz:
                 try:
                     get_parameter_status = self.connection.get_parameter_status
@@ -189,36 +183,11 @@ class DatabaseWrapper(BaseDatabaseWrapper):
                     conn_tz = None
                 else:
                     conn_tz = get_parameter_status('TimeZone')
-
-#                 if conn_tz != tz:
-                    # Set the time zone in autocommit mode (see #17062)
-#                     self.connection.set_isolation_level(
-#                             pynuodb.extensions.ISOLATION_LEVEL_AUTOCOMMIT)
-#                     print "timezone: %s" % tz
-#                     self.connection.cursor().execute(
-#                             self.ops.set_time_zone_sql(), [tz])
-#             self.connection.set_isolation_level(self.isolation_level)
             self._get_nuodb_version()
             connection_created.send(sender=self.__class__, connection=self)
         cursor = self.connection.cursor()
         cursor.tzinfo_factory = utc_tzinfo_factory if settings.USE_TZ else None
         return CursorWrapper(cursor)
-
-#     def _enter_transaction_management(self, managed):
-#         """
-#         Switch the isolation level when needing transaction support, so that
-#         the same transaction is visible across all the queries.
-#         """
-#         if self.features.uses_autocommit and managed and not self.isolation_level:
-#             self._set_isolation_level(pynuodb.extensions.ISOLATION_LEVEL_READ_COMMITTED)
-# 
-#     def _leave_transaction_management(self, managed):
-#         """
-#         If the normal operating mode is "autocommit", switch back to that when
-#         leaving transaction management.
-#         """
-#         if self.features.uses_autocommit and not managed and self.isolation_level:
-#             self._set_isolation_level(pynuodb.extensions.ISOLATION_LEVEL_AUTOCOMMIT)
 
     def _set_isolation_level(self, level):
         """

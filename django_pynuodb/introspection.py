@@ -4,6 +4,7 @@ from django.db.backends import BaseDatabaseIntrospection
 
 
 class DatabaseIntrospection(BaseDatabaseIntrospection):
+     
     # Maps type codes to Django Field types.
     data_types_reverse = {
         16: 'BooleanField',
@@ -25,20 +26,21 @@ class DatabaseIntrospection(BaseDatabaseIntrospection):
     }
         
     def get_table_list(self, cursor):
+        print 'get_table_list'
         "Returns a list of table names in the current database."
-        cursor.execute("""
-            SELECT c.relname
-            FROM pg_catalog.pg_class c
-            LEFT JOIN pg_catalog.pg_namespace n ON n.oid = c.relnamespace
-            WHERE c.relkind IN ('r', 'v', '')
-                AND n.nspname NOT IN ('pg_catalog', 'pg_toast')
-                AND pg_catalog.pg_table_is_visible(c.oid)""")
-        return [row[0] for row in cursor.fetchall()]
+        print 'cursor: %s' % cursor.execute
+        cursor.execute(""" SELECT tablename FROM system.tables """)
+        print 'get tabel list middle'
+        results = [row[0] for row in cursor.fetchall()]
+        print 'get_table_list results: %s' % results
+        return results
 
     def get_table_description(self, cursor, table_name):
+        print 'get_table_description'
         "Returns a description of the table, with the DB-API cursor.description interface."
         # As cursor.description does not return reliably the nullable property,
         # we have to query the information_schema (#7783)
+        print 'get_table_description'
         cursor.execute("""
             SELECT column_name, is_nullable
             FROM information_schema.columns
@@ -49,6 +51,7 @@ class DatabaseIntrospection(BaseDatabaseIntrospection):
                 for line in cursor.description]
 
     def get_relations(self, cursor, table_name):
+        print 'get_relations'
         """
         Returns a dictionary of {field_index: (field_index_other_table, other_table)}
         representing all relationships to the given table. Indexes are 0-based.
@@ -67,6 +70,7 @@ class DatabaseIntrospection(BaseDatabaseIntrospection):
         return relations
 
     def get_indexes(self, cursor, table_name):
+        print 'get_indexes'
         # This query retrieves each index on the given table, including the
         # first associated field name
         cursor.execute("""
