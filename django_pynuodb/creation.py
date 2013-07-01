@@ -1,8 +1,23 @@
 # import psycopg2.extensions
+import pynuodb.entity
+import tempfile
+import unittest
+import time
+import os
+import string
+import random
+import sys
 
 from django.db.backends.creation import BaseDatabaseCreation
 from django.db.backends.util import truncate_name
 
+HOST            = "localhost"
+DOMAIN_USER     = "domain"
+DOMAIN_PASSWORD = "bird"
+
+DBA_USER        = 'dba'
+DBA_PASSWORD    = 'dba_password'
+DATABASE_NAME   = 'test_test'
 
 class DatabaseCreation(BaseDatabaseCreation):
     # This dictionary maps Field objects to their associated PostgreSQL column
@@ -79,6 +94,71 @@ class DatabaseCreation(BaseDatabaseCreation):
 
     def set_autocommit(self):
         self._prepare_for_test_db_ddl()
+
+
+    def _create_test_db(self, verbosity, autoclobber):
+        """
+        Internal implementation - creates the test db tables.
+        """
+        domain = pynuodb.entity.Domain(HOST, DOMAIN_USER, DOMAIN_PASSWORD)
+        try:
+            test_database_name = self._get_test_db_name()
+            if test_database_name not in [db.getName() for db in domain.getDatabases()]:
+                peer = domain.getEntryPeer()
+                archive = os.path.join(tempfile.gettempdir(), ''.join(random.choice(string.ascii_uppercase + string.digits) for x in range(20)))
+                peer.startStorageManager(test_database_name, archive, True, waitSeconds=10)
+                peer.startTransactionEngine(test_database_name,  [('--dba-user', DBA_USER),('--dba-password', DBA_PASSWORD)], waitSeconds=10)
+            return test_database_name
+        finally:
+            domain.disconnect()
+            
+
+    def destroy_test_db(self, old_database_name, verbosity=1):
+        """
+        Destroy a test database, prompting the user for confirmation if the
+        database already exists.
+        """
+        self.connection.close()
+        test_database_name = self.connection.settings_dict['NAME']
+        if verbosity >= 1:
+            test_db_repr = ''
+            if verbosity >= 2:
+                test_db_repr = " ('%s')" % test_database_name
+            print("Destroying test database for alias '%s'%s..." % (
+                self.connection.alias, test_db_repr))
+
+        # Temporarily use a new connection and a copy of the settings dict.
+        # This prevents the production database from being exposed to potential
+        # child threads while (or after) the test database is destroyed.
+        # Refs #10868 and #17786.
+        settings_dict = self.connection.settings_dict.copy()
+        settings_dict['NAME'] = old_database_name
+        backend = load_backend(settings_dict['ENGINE'])
+        new_connection = backend.DatabaseWrapper(
+                             settings_dict,
+                             alias='__destroy_test_db__',
+                             allow_thread_sharing=False)
+        new_connection.creation._destroy_test_db(test_database_name, verbosity)
+
+    def _destroy_test_db(self, test_database_name, verbosity):
+        """
+        Internal implementation - remove the test db tables.
+        """
+        listener = TestDomainListener()
+        domain = pynuodb.entity.Domain(HOST, DOMAIN_USER, DOMAIN_PASSWORD, listener)
+        try:
+            database = domain.getDatabase(test_database_name)
+            if database is not None:
+                for process in database.getProcesses():
+                    process.shutdown()
+                    
+                for i in xrange(1,20):
+                    time.sleep(0.25)
+                    if listener.db_left:
+                        time.sleep(1)
+                        break
+        finally:
+            domain.disconnect()
 
     def _prepare_for_test_db_ddl(self):
         """Rollback and close the active transaction."""

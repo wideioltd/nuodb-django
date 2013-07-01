@@ -180,7 +180,7 @@ class DatabaseWrapper(BaseDatabaseWrapper):
             conn_params['options'] = options
             print "connect params: %s" % conn_params 
             self.connection = Database.connect(**conn_params)
-            self.connection.set_client_encoding('UTF8')
+#             self.connection.set_client_encoding('UTF8')
             if tz:
                 try:
                     get_parameter_status = self.connection.get_parameter_status

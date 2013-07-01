@@ -19,5 +19,7 @@ class DatabaseClient(BaseDatabaseClient):
         if os.name == 'nt':
             sys.exit(os.system(" ".join(args)))
         else:
+            print "executable name: %s" % self.executable_name
+            print "args: %s" % args 
             os.execvp(self.executable_name, args)
 
