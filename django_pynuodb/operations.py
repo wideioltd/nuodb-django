@@ -7,6 +7,13 @@ class DatabaseOperations(BaseDatabaseOperations):
     def __init__(self, connection):
         super(DatabaseOperations, self).__init__(connection)
 
+    def quote_name(self, name):
+        """
+        Returns a quoted version of the given table, index or column name. Does
+        not quote the given name if it's already been quoted.
+        """
+        return name
+
     def date_extract_sql(self, lookup_type, field_name):
         # http://www.postgresql.org/docs/8.0/static/functions-datetime.html#FUNCTIONS-DATETIME-EXTRACT
         if lookup_type == 'week_day':
@@ -59,17 +66,11 @@ class DatabaseOperations(BaseDatabaseOperations):
         # Use pg_get_serial_sequence to get the underlying sequence name
         # from the table name and column name (available since PostgreSQL 8)
         cursor.execute("SELECT CURRVAL(pg_get_serial_sequence('%s','%s'))" % (
-            self.quote_name(table_name), pk_name))
+            table_name, pk_name))
         return cursor.fetchone()[0]
 
     def no_limit_value(self):
         return None
-
-    def quote_name(self, name):
-        if name.startswith('"') and name.endswith('"'):
-            name = name.replace("\"", "\'")
-            return name # Quoting once is enough.
-        return "'%s'" % name
 
     def set_time_zone_sql(self):
         return "SET TIME ZONE %s"
@@ -81,7 +82,7 @@ class DatabaseOperations(BaseDatabaseOperations):
             # table.
             sql = ['%s %s;' % \
                 (style.SQL_KEYWORD('TRUNCATE'),
-                    style.SQL_FIELD(', '.join([self.quote_name(table) for table in tables]))
+                    style.SQL_FIELD(', '.join(tables))
             )]
             sql.extend(self.sequence_reset_by_name_sql(style, sequences))
             return sql
@@ -101,21 +102,20 @@ class DatabaseOperations(BaseDatabaseOperations):
                 column_name = 'id'
             sql.append("%s setval(pg_get_serial_sequence('%s','%s'), 1, false);" % \
                 (style.SQL_KEYWORD('SELECT'),
-                style.SQL_TABLE(self.quote_name(table_name)),
+                style.SQL_TABLE(table_name),
                 style.SQL_FIELD(column_name))
             )
         return sql
 
     def tablespace_sql(self, tablespace, inline=False):
         if inline:
-            return "USING INDEX TABLESPACE %s" % self.quote_name(tablespace)
+            return "USING INDEX TABLESPACE %s" % tablespace
         else:
-            return "TABLESPACE %s" % self.quote_name(tablespace)
+            return "TABLESPACE %s" % tablespace
 
     def sequence_reset_sql(self, style, model_list):
         from django.db import models
         output = []
-        qn = self.quote_name
         for model in model_list:
             # Use `coalesce` to set the sequence for each model to the max pk value if there are records,
             # or 1 if there are none. Set the `is_called` property (the third argument to `setval`) to true
@@ -127,25 +127,25 @@ class DatabaseOperations(BaseDatabaseOperations):
                 if isinstance(f, models.AutoField):
                     output.append("%s setval(pg_get_serial_sequence('%s','%s'), coalesce(max(%s), 1), max(%s) %s null) %s %s;" % \
                         (style.SQL_KEYWORD('SELECT'),
-                        style.SQL_TABLE(qn(model._meta.db_table)),
+                        style.SQL_TABLE(model._meta.db_table),
                         style.SQL_FIELD(f.column),
-                        style.SQL_FIELD(qn(f.column)),
-                        style.SQL_FIELD(qn(f.column)),
+                        style.SQL_FIELD(f.column),
+                        style.SQL_FIELD(f.column),
                         style.SQL_KEYWORD('IS NOT'),
                         style.SQL_KEYWORD('FROM'),
-                        style.SQL_TABLE(qn(model._meta.db_table))))
+                        style.SQL_TABLE(model._meta.db_table)))
                     break # Only one AutoField is allowed per model, so don't bother continuing.
             for f in model._meta.many_to_many:
                 if not f.rel.through:
                     output.append("%s setval(pg_get_serial_sequence('%s','%s'), coalesce(max(%s), 1), max(%s) %s null) %s %s;" % \
                         (style.SQL_KEYWORD('SELECT'),
-                        style.SQL_TABLE(qn(f.m2m_db_table())),
+                        style.SQL_TABLE(f.m2m_db_table()),
                         style.SQL_FIELD('id'),
-                        style.SQL_FIELD(qn('id')),
-                        style.SQL_FIELD(qn('id')),
+                        style.SQL_FIELD('id'),
+                        style.SQL_FIELD('id'),
                         style.SQL_KEYWORD('IS NOT'),
                         style.SQL_KEYWORD('FROM'),
-                        style.SQL_TABLE(qn(f.m2m_db_table()))))
+                        style.SQL_TABLE(f.m2m_db_table())))
         return output
 
     def savepoint_create_sql(self, sid):

@@ -30,7 +30,7 @@ class DatabaseCreation(BaseDatabaseCreation):
         'CharField':         'varchar(%(max_length)s)',
         'CommaSeparatedIntegerField': 'varchar(%(max_length)s)',
         'DateField':         'date',
-        'DateTimeField':     'timestamp with time zone',
+        'DateTimeField':     'timestamp',
         'DecimalField':      'numeric(%(max_digits)s, %(decimal_places)s)',
         'FileField':         'varchar(%(max_length)s)',
         'FilePathField':     'varchar(%(max_length)s)',
@@ -149,6 +149,7 @@ class DatabaseCreation(BaseDatabaseCreation):
             output = []
             pending = True
 
+        output = [str(out) for out in output]
         return output, pending
     
     def sql_for_pending_references(self, model, style, pending_references):
@@ -179,6 +180,7 @@ class DatabaseCreation(BaseDatabaseCreation):
                     r_col, table, col,
                     self.connection.ops.deferrable_sql()))
             del pending_references[model]
+        final_output = [str(output) for output in final_output]
         return final_output
 
     def sql_table_creation_suffix(self):

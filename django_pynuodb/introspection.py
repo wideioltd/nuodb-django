@@ -43,7 +43,7 @@ class DatabaseIntrospection(BaseDatabaseIntrospection):
             FROM information_schema.columns
             WHERE table_name = %s""", [table_name])
         null_map = dict(cursor.fetchall())
-        cursor.execute("SELECT * FROM %s LIMIT 1" % self.connection.ops.quote_name(table_name))
+        cursor.execute("SELECT * FROM %s LIMIT 1" % table_name)
         return [line[:6] + (null_map[line[0]]=='YES',)
                 for line in cursor.description]
 
