@@ -74,7 +74,7 @@ class DatabaseFeatures(BaseDatabaseFeatures):
     can_return_id_from_insert = True
     requires_rollback_on_dirty_transaction = True
     has_real_datatype = True
-    can_defer_constraint_checks = True
+    can_defer_constraint_checks = False
     has_select_for_update = True
     has_select_for_update_nowait = True
     has_bulk_insert = True
@@ -162,7 +162,12 @@ class DatabaseWrapper(BaseDatabaseWrapper):
             conn_params.update(settings_dict['OPTIONS'])
             if 'autocommit' in conn_params:
                 del conn_params['autocommit']
-            options = {}
+            
+            if settings_dict.has_key('SCHEMA'):
+                options = {"schema": settings_dict['SCHEMA']}
+            else:
+                options = {"schema": "user"}
+            
             if settings_dict['USER']:
                 conn_params['user'] = settings_dict['USER']
             if settings_dict['PASSWORD']:

@@ -36,9 +36,6 @@ class DatabaseOperations(BaseDatabaseOperations):
         # http://www.postgresql.org/docs/8.0/static/functions-datetime.html#FUNCTIONS-DATETIME-TRUNC
         return "DATE_TRUNC('%s', %s)" % (lookup_type, field_name)
 
-    def deferrable_sql(self):
-        return " DEFERRABLE INITIALLY DEFERRED"
-
     def lookup_cast(self, lookup_type):
         lookup = '%s'
 
