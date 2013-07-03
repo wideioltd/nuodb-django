@@ -130,6 +130,56 @@ class DatabaseCreation(BaseDatabaseCreation):
         # 
         final_output = [str(string.join(output)) for output in final_output]
         return final_output, pending_references
+    
+    def sql_for_inline_foreign_key_references(self, field, known_models, style):
+        """
+        Return the SQL snippet defining the foreign key reference for a field.
+        """
+        if field.rel.to in known_models:
+            output = [style.SQL_KEYWORD('REFERENCES') + ' ' +
+                style.SQL_TABLE(field.rel.to._meta.db_table) + ' (' +
+                style.SQL_FIELD(field.rel.to._meta.get_field(
+                    field.rel.field_name).column) + ')' +
+                self.connection.ops.deferrable_sql()
+            ]
+            pending = False
+        else:
+            # We haven't yet created the table to which this field
+            # is related, so save it for later.
+            output = []
+            pending = True
+
+        return output, pending
+    
+    def sql_for_pending_references(self, model, style, pending_references):
+        """
+        Returns any ALTER TABLE statements to add constraints after the fact.
+        """
+        from django.db.backends.util import truncate_name
+
+        opts = model._meta
+        if not opts.managed or opts.proxy or opts.swapped:
+            return []
+        final_output = []
+        if model in pending_references:
+            for rel_class, f in pending_references[model]:
+                rel_opts = rel_class._meta
+                r_table = rel_opts.db_table
+                r_col = f.column
+                table = opts.db_table
+                col = opts.get_field(f.rel.field_name).column
+                # For MySQL, r_name must be unique in the first 64 characters.
+                # So we are careful with character usage here.
+                r_name = '%s_refs_%s_%s' % (
+                    r_col, col, self._digest(r_table, table))
+                final_output.append(style.SQL_KEYWORD('ALTER TABLE') +
+                    ' %s ADD CONSTRAINT %s FOREIGN KEY (%s) REFERENCES %s (%s)%s;' %
+                    (r_table, truncate_name(
+                        r_name, self.connection.ops.max_name_length()),
+                    r_col, table, col,
+                    self.connection.ops.deferrable_sql()))
+            del pending_references[model]
+        return final_output
 
     def sql_table_creation_suffix(self):
         assert self.connection.settings_dict['TEST_COLLATION'] is None, "NuoDB does not support collation setting at database creation time."
