@@ -44,9 +44,11 @@ class CursorWrapper(object):
     def __init__(self, cursor):
         self.cursor = cursor
 
-    def execute(self, query, args=None):
+    def execute(self, query, args=()):
         try:
-            return self.cursor.execute(str(query), args)
+#             query = str(query)
+#             query = query % (("?",) * query.count("%s"))
+            return self.cursor.execute(str(query % args))
         except Database.IntegrityError as e:
             six.reraise(utils.IntegrityError, utils.IntegrityError(*tuple(e.args)), sys.exc_info()[2])
         except Database.DatabaseError as e:

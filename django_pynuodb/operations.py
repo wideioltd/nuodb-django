@@ -8,10 +8,6 @@ class DatabaseOperations(BaseDatabaseOperations):
         super(DatabaseOperations, self).__init__(connection)
 
     def quote_name(self, name):
-        """
-        Returns a quoted version of the given table, index or column name. Does
-        not quote the given name if it's already been quoted.
-        """
         return name
 
     def date_extract_sql(self, lookup_type, field_name):
