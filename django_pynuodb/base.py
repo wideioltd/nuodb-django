@@ -46,9 +46,9 @@ class CursorWrapper(object):
 
     def execute(self, query, args=()):
         try:
-#             query = str(query)
-#             query = query % (("?",) * query.count("%s"))
-            return self.cursor.execute(str(query % args))
+            query = str(query)
+            query = query % (("?",) * query.count("%s"))
+            return self.cursor.execute(query, args)
         except Database.IntegrityError as e:
             six.reraise(utils.IntegrityError, utils.IntegrityError(*tuple(e.args)), sys.exc_info()[2])
         except Database.DatabaseError as e:
@@ -72,17 +72,20 @@ class CursorWrapper(object):
         return iter(self.cursor)
 
 class DatabaseFeatures(BaseDatabaseFeatures):
+    allows_group_by_pk = True
+    uses_savepoints = True
+    allow_sliced_subqueries = False
+    supports_select_related = False
+    supports_unspecified_pk = True
+    supports_forward_references = False
+    supports_subqueries_in_group_by = False
+    supports_bitwise_or = False
+    supports_timezones = False
     needs_datetime_string_cast = False
-    can_return_id_from_insert = True
     requires_rollback_on_dirty_transaction = True
-    has_real_datatype = True
-    can_defer_constraint_checks = False
     has_select_for_update = True
-    has_select_for_update_nowait = True
-    has_bulk_insert = True
-    supports_tablespaces = True
     supports_transactions = True
-    can_distinct_on_fields = True
+    can_introspect_foreign_keys = False
 
 class DatabaseWrapper(BaseDatabaseWrapper):
     vendor = 'nuodb'
@@ -115,14 +118,6 @@ class DatabaseWrapper(BaseDatabaseWrapper):
         self.introspection = DatabaseIntrospection(self)
         self.validation = BaseDatabaseValidation(self)
         self._nuodb_version = None
-
-    def check_constraints(self, table_names=None):
-        """
-        To check constraints, we set constraints to immediate. Then, when, we're done we must ensure they
-        are returned to deferred.
-        """
-        self.cursor().execute('SET CONSTRAINTS ALL IMMEDIATE')
-        self.cursor().execute('SET CONSTRAINTS ALL DEFERRED')
 
     def close(self):
 #         self.validate_thread_sharing()
