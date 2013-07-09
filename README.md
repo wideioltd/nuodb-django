@@ -8,6 +8,8 @@ This is the official Django adapter for [NuoDB](http://www.nuodb.com). It levera
 
 If you haven't already, [Download and Install NuoDB](http://nuodb.com/download-nuodb/)
 
+In the settings.py file in your project, set the USE_TZ flag to False.
+
 ### Setup
 
 1 - git clone https://github.com/nuodb/nuodb-django.git

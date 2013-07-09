@@ -45,7 +45,7 @@ class DatabaseOperations(BaseDatabaseOperations):
         # Cast text lookups to text to allow things like filter(x__contains=4)
         if lookup_type in ('iexact', 'contains', 'icontains', 'startswith',
                            'istartswith', 'endswith', 'iendswith'):
-            lookup = "%s::text"
+            lookup = "%s"
 
         # Use UPPER(x) for case-insensitive lookups; it's faster.
         if lookup_type in ('iexact', 'icontains', 'istartswith', 'iendswith'):
@@ -74,10 +74,8 @@ class DatabaseOperations(BaseDatabaseOperations):
             # us to truncate tables referenced by a foreign key in any other
             # table.
             sql = ['%s %s;' % \
-                (style.SQL_KEYWORD('TRUNCATE'),
-                    style.SQL_FIELD(', '.join(tables))
-            )]
-            sql.extend(self.sequence_reset_by_name_sql(style, sequences))
+                (style.SQL_KEYWORD('TRUNCATE TABLE '),
+                    style.SQL_FIELD(t)) for t in tables]
             return sql
         else:
             return []
@@ -177,7 +175,7 @@ class DatabaseOperations(BaseDatabaseOperations):
         custom database backend that inherits most of its behavior from this one.
         """
 
-        return 63
+        return 128
 
     def distinct_sql(self, fields):
         if fields:

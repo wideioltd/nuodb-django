@@ -26,14 +26,12 @@ class DatabaseIntrospection(BaseDatabaseIntrospection):
     }
         
     def get_table_list(self, cursor):
-        print 'get_table_list'
         "Returns a list of table names in the current database."
         cursor.execute(str("SELECT tablename FROM system.tables"))
         results = [row[0] for row in cursor.fetchall()]
         return results
 
     def get_table_description(self, cursor, table_name):
-        print 'get_table_description'
         "Returns a description of the table, with the DB-API cursor.description interface."
         # As cursor.description does not return reliably the nullable property,
         # we have to query the information_schema (#7783)
@@ -47,8 +45,14 @@ class DatabaseIntrospection(BaseDatabaseIntrospection):
         return [line[:6] + (null_map[line[0]]=='YES',)
                 for line in cursor.description]
 
+    def table_name_converter(self, name):
+        """Apply a conversion to the name for the purposes of comparison.
+
+        The default table name converter is for case sensitive comparison.
+        """
+        return str(name).upper()
+
     def get_relations(self, cursor, table_name):
-        print 'get_relations'
         """
         Returns a dictionary of {field_index: (field_index_other_table, other_table)}
         representing all relationships to the given table. Indexes are 0-based.
@@ -67,7 +71,6 @@ class DatabaseIntrospection(BaseDatabaseIntrospection):
         return relations
 
     def get_indexes(self, cursor, table_name):
-        print 'get_indexes'
         # This query retrieves each index on the given table, including the
         # first associated field name
         cursor.execute("""
