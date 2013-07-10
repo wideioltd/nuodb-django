@@ -6,7 +6,7 @@ This is the official Django adapter for [NuoDB](http://www.nuodb.com). It levera
 
 If you haven't already, [Download and Install NuoDB](http://nuodb.com/download-nuodb/)
 
-In the settings.py file in your project, set the `USE_TZ` flag to False.
+In the settings.py file in your project, set the `USE_TZ` flag to False. This is done because the timezone is detected when the connection is created.
 
 Set the `ENGINE` field in the `DATABASES/default` dictionary in settings.py to the django_pynuodb folder (if you installed using pip this is just `django_pynuodb`)
 
@@ -23,6 +23,8 @@ or install with pip
 
 ### Sample
 
+Here is a sample database dictionary
+
 ```
 DATABASES = {
     'default': {
@@ -35,6 +37,12 @@ DATABASES = {
         'PORT': '48004',                                                                                                                                                      
     }
 }
+```
+
+Set the `USE_TZ` flag to `False`
+
+```
+USE_TZ = False
 ```
 
 ### License
