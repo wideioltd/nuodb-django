@@ -22,6 +22,23 @@ or install with pip
 
 2 - pip install django_pynuodb
 
+
+### Sample
+
+```
+DATABASES = {
+    'default': {
+        'ENGINE': 'django_pynuodb',                                                                                                      
+        'NAME': 'test',                                                                                                                                                                                                                                                                                                    
+        'USER': 'dba',
+        'SCHEMA': '',  					# optional
+        'PASSWORD': 'goalie',
+        'HOST': 'localhost',                                                                                            
+        'PORT': '48004',                                                                                                                                                      
+    }
+}
+```
+
 ### License
 
 [NuoDB License](https://github.com/nuodb/nuodb-drivers/blob/master/LICENSE)
