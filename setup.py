@@ -3,7 +3,7 @@ from distutils.core import setup
 
 setup(
     name='django_pynuodb',
-    version='0.2',
+    version='0.3',
     author='NuoDB',
     author_email='info@nuodb.com',
     description="NuoDB Extension for Django",
