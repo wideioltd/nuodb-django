@@ -28,17 +28,13 @@
 
 all:
 	make install
-	make test
 
 install:	
 	sudo python setup.py install
 	sudo rm -rf build
 
-test:
-	python run_tests.py -v
-
 deploy:
 	python setup.py register
 	python setup.py sdist upload
 
-.PHONY: all install test
+.PHONY: all install
