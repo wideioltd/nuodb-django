@@ -10,6 +10,8 @@ If you haven't already, [Download and Install NuoDB](http://nuodb.com/download-n
 
 In the settings.py file in your project, set the USE_TZ flag to False.
 
+You can optionally set the schema via the `SCHEMA` field in settings.py
+
 ### Setup
 
 1 - git clone https://github.com/nuodb/nuodb-django.git
@@ -17,6 +19,13 @@ In the settings.py file in your project, set the USE_TZ flag to False.
 or install with pip
 
 2 - pip install nuodb_django
+
+
+In setting.py, set the default database to `django_pynuodb`
+
+
+### Example
+
 
 
 ### License
