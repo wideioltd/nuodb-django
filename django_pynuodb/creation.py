@@ -9,6 +9,7 @@ import random
 import sys
 
 from django.conf import settings
+from django.db.utils import load_backend
 
 from django.db.backends.creation import BaseDatabaseCreation
 from django.db.backends.util import truncate_name
@@ -288,7 +289,7 @@ class DatabaseCreation(BaseDatabaseCreation):
         domain = pynuodb.entity.Domain(HOST, DOMAIN_USER, DOMAIN_PASSWORD)
         try:
             test_database_name = self._get_test_db_name()
-            if test_database_name not in [db.getName() for db in domain.getDatabases()]:
+            if test_database_name not in [db.name for db in domain.databases]:
                 peer = domain.getEntryPeer()
                 archive = os.path.join(tempfile.gettempdir(), ''.join(random.choice(string.ascii_uppercase + string.digits) for x in range(20)))
                 peer.startStorageManager(test_database_name, archive, True, waitSeconds=10)
@@ -332,9 +333,9 @@ class DatabaseCreation(BaseDatabaseCreation):
         listener = TestDomainListener()
         domain = pynuodb.entity.Domain(HOST, DOMAIN_USER, DOMAIN_PASSWORD, listener)
         try:
-            database = domain.getDatabase(test_database_name)
+            database = domain.get_database(test_database_name)
             if database is not None:
-                for process in database.getProcesses():
+                for process in database.processes:
                     process.shutdown()
                     
                 for i in xrange(1,20):
@@ -344,6 +345,13 @@ class DatabaseCreation(BaseDatabaseCreation):
                         break
         finally:
             domain.disconnect()
+            
+class TestDomainListener(object):
+    def __init__(self):
+        self.db_left = False
+            
+    def database_left(self, database):
+        self.db_left = True
 
     def _prepare_for_test_db_ddl(self):
         """Rollback and close the active transaction."""
