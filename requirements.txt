@@ -1,1 +1,1 @@
-pynuodb==0.2
+pynuodb==0.4
