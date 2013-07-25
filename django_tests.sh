@@ -26,8 +26,8 @@ git clone https://github.com/django/django.git
 
 ls && cd django
 
-export PYTHONPATH = /home/travis/virtualenv/python2.7/lib/python2.7/site-packages/django
-export PYTHON_PATH = /home/travis/virtualenv/python2.7/lib/python2.7/site-packages/django
+export PYTHONPATH=/home/travis/virtualenv/python2.7/lib/python2.7/site-packages/django
+export PYTHON_PATH=/home/travis/virtualenv/python2.7/lib/python2.7/site-packages/django
 
 #cd /tmp
 #git clone https://github.com/nuodb/nuodb-django.git
