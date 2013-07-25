@@ -16,10 +16,17 @@ sed -i "s/'HOST': '',/'HOST': 'localhost',/" settings.py
 sed -i "s/'PORT': '',/'PORT': '48004',/" settings.py
 sed -i "s/USE_TZ = True/USE_TZ = False/" settings.py
 
+#Changing the manage path
+cd /tmp/nuodb_site
+sed -i "s#/usr/bin/env python#/home/travis/virtualenv/python2.7/bin/env#" manage.py
+
 echo "HERE"
 cd /home/travis/virtualenv/python2.7/lib/python2.7/site-packages && ls
 echo "Python path:"
 which python
+
+echo $PYTHONPATH
+echo $PYTHON_PATH
 
 #cd /tmp
 #git clone https://github.com/nuodb/nuodb-django.git
