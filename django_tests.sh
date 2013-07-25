@@ -18,7 +18,7 @@ sed -i "s/USE_TZ = True/USE_TZ = False/" settings.py
 
 #Changing the manage path
 cd /tmp/nuodb_site
-sed -i "s#/usr/bin/env python#/home/travis/virtualenv/python2.7/bin/env#" manage.py
+sed -i "s#/usr/bin/env python#/home/travis/virtualenv/python2.7/bin/env python#" manage.py
 
 echo "HERE"
 cd /home/travis/virtualenv/python2.7/lib/python2.7/site-packages && ls
