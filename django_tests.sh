@@ -25,3 +25,4 @@ cd /tmp/nuodb_site
 yes | python manage.py syncdb
 
 #python manage.py test
+
