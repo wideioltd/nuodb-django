@@ -16,8 +16,13 @@ sed -i "s/'HOST': '',/'HOST': 'localhost',/" settings.py
 sed -i "s/'PORT': '',/'PORT': '48004',/" settings.py
 sed -i "s/USE_TZ = True/USE_TZ = False/" settings.py
 
-cd /tmp
-git clone https://github.com/nuodb/nuodb-django.git
+python -c "from distutils.sysconfig import get_python_lib; print get_python_lib()"
+echo "2.7"
+python2.5 -c "from distutils.sysconfig import get_python_lib; print get_python_lib()"
+
+
+#cd /tmp
+#git clone https://github.com/nuodb/nuodb-django.git
 
 #cd /opt/nuodb
 #./run-quickstart
