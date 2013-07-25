@@ -1,7 +1,8 @@
 sudo apt-get install python-pip
-sudo pip install django
+sudo pip install Django
 sudo pip install pynuodb
 sudo pip install django_pynuodb
+#sudo apt-get install python-django
 
 cd /tmp
 django-admin.py startproject nuodb_site
@@ -19,7 +20,7 @@ cd /tmp
 git clone https://github.com/nuodb/nuodb-django.git
 
 cd /opt/nuodb
-quit | ./run-quickstart
+./run-quickstart
 
 cd /tmp/nuodb_site
 yes | python manage.py syncdb
