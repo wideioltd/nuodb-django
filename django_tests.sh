@@ -19,8 +19,8 @@ sed -i "s/USE_TZ = True/USE_TZ = False/" settings.py
 cd /tmp
 git clone https://github.com/nuodb/nuodb-django.git
 
-cd /opt/nuodb
-./run-quickstart
+#cd /opt/nuodb
+#./run-quickstart
 
 cd /tmp/nuodb_site
 yes | python manage.py syncdb
