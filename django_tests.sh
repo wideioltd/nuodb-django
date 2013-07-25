@@ -20,13 +20,14 @@ sed -i "s/USE_TZ = True/USE_TZ = False/" settings.py
 cd /tmp/nuodb_site
 sed -i "s#/usr/bin/env python#/home/travis/virtualenv/python2.7/bin/env python#" manage.py
 
-echo "HERE"
-cd /home/travis/virtualenv/python2.7/lib/python2.7/site-packages && ls
-echo "Python path:"
-which python
+cd /home/travis/virtualenv/python2.7/lib/python2.7/site-packages/ && ls
 
-echo $PYTHONPATH
-echo $PYTHON_PATH
+git clone https://github.com/django/django.git
+
+ls && cd django
+
+export PYTHONPATH = /home/travis/virtualenv/python2.7/lib/python2.7/site-packages/django
+export PYTHON_PATH = /home/travis/virtualenv/python2.7/lib/python2.7/site-packages/django
 
 #cd /tmp
 #git clone https://github.com/nuodb/nuodb-django.git
