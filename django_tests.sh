@@ -1,7 +1,7 @@
 sudo apt-get install python-pip
 sudo pip install Django
 sudo pip install pynuodb
-sudo pip install django_pynuodb
+#sudo pip install django_pynuodb
 #sudo apt-get install python-django
 
 cd /tmp
@@ -23,11 +23,17 @@ sed -i "s#/usr/bin/env python#/home/travis/virtualenv/python2.7/bin/env python#"
 cd /home/travis/virtualenv/python2.7/lib/python2.7/site-packages/ && ls
 
 git clone https://github.com/django/django.git
+cd django
+python setup.py install
+cd ..
+git clone https://github.com/nuodb/nuodb-django.git nuodb-django
+cd nuodb-django
+python setup.py install
 
 ls && cd django
 
-export PYTHONPATH=/home/travis/virtualenv/python2.7/lib/python2.7/site-packages/django
-export PYTHON_PATH=/home/travis/virtualenv/python2.7/lib/python2.7/site-packages/django
+export PYTHONPATH=/home/travis/virtualenv/python2.7/lib/python2.7/site-packages/django/django
+export PYTHON_PATH=/home/travis/virtualenv/python2.7/lib/python2.7/site-packages/django/django
 
 #cd /tmp
 #git clone https://github.com/nuodb/nuodb-django.git
