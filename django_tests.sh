@@ -1,7 +1,7 @@
-apt-get install python-pip
-pip install Django
-pip install pynuodb
-pip install django_pynuodb
+#apt-get install python-pip
+#pip install Django
+#pip install pynuodb
+#pip install django_pynuodb
 
 cd /tmp
 django-admin.py startproject nuodb_site
