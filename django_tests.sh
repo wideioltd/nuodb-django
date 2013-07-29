@@ -11,10 +11,10 @@ sed -i "s/'PORT': '',/'PORT': '48004',/" settings.py
 sed -i "s/USE_TZ = True/USE_TZ = False/" settings.py
 
 #Skipping unsupported tests
-sudo chmod 777 /usr/local/lib/python2.7/dist-packages/django/contrib/sessions/tests.py
+sudo chmod 777 /home/travis/virtualenv/python2.7/dist-packages/django/contrib/sessions/tests.py
 sed -i '1s/^/from django.test.testcases import skipIfDBFeature\n/' /usr/local/lib/python2.7/dist-packages/django/contrib/sessions/tests.py
-sed -i "s/@override_settings(USE_TZ=True)/#@override_settings(USE_TZ=True)/" /usr/local/lib/python2.7/dist-packages/django/contrib/sessions/tests.py
-sed -i "s/@override_settings(USE_TZ=True)/#@override_settings(USE_TZ=True)/" /usr/local/lib/python2.7/dist-packages/django/contrib/sessions/tests.py
+sed -i "s/@override_settings(USE_TZ=True)/#@override_settings(USE_TZ=True)/" /home/travis/virtualenv/python2.7/dist-packages/django/contrib/sessions/tests.py
+sed -i "s/@override_settings(USE_TZ=True)/#@override_settings(USE_TZ=True)/" /home/travis/virtualenv/python2.7/dist-packages/django/contrib/sessions/tests.py
 
 # sudo chmod 777 /usr/local/lib/python2.7/dist-packages/django/contrib/sites/tests.py
 # sed -i '1s/^/from django.test.testcases import skipIfDBFeature\n/' /usr/local/lib/python2.7/dist-packages/django/contrib/sites/tests.py
