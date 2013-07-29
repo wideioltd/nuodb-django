@@ -36,7 +36,7 @@ sudo chmod 777 /home/travis/virtualenv/python2.7/lib/python2.7/site-packages/dja
 sed -i "s/from django.utils._os import upath/from django.utils._os import upath\nfrom django.test.testcases import skipIfDBFeature/" /home/travis/virtualenv/python2.7/lib/python2.7/site-packages/django/contrib/auth/tests/context_processors.py
 #echo 'from django.test.testcases import skipIfDBFeature' | cat - /home/travis/virtualenv/python2.7/lib/python2.7/site-packages/django/contrib/auth/tests/context_processors.py > temp && mv temp /home/travis/virtualenv/python2.7/lib/python2.7/site-packages/django/contrib/auth/tests/context_processors.py
 sed -i "s/def test_perms_attrs(self):/@skipIfDBFeature('supports_transactions')\n    def test_perms_attrs(self):/" /home/travis/virtualenv/python2.7/lib/python2.7/site-packages/django/contrib/auth/tests/context_processors.py
-sed -i "s/def test_perms_attrs(self):/@skipIfDBFeature('supports_transactions')\n    def test_perm_in_perms_attrs(self):/" /home/travis/virtualenv/python2.7/lib/python2.7/site-packages/django/contrib/auth/tests/context_processors.py
+sed -i "s/def test_perm_in_perms_attrs(self):/@skipIfDBFeature('supports_transactions')\n    def test_perm_in_perms_attrs(self):/" /home/travis/virtualenv/python2.7/lib/python2.7/site-packages/django/contrib/auth/tests/context_processors.py
 
 sudo chmod 777 /home/travis/virtualenv/python2.7/lib/python2.7/site-packages/django/contrib/auth/tests/remote_user.py
 sed -i "s/from django.utils import timezone/from django.utils import timezone\nfrom django.test.testcases import skipIfDBFeature/" /home/travis/virtualenv/python2.7/lib/python2.7/site-packages/django/contrib/auth/tests/remote_user.py
@@ -47,3 +47,8 @@ sudo chmod 777 /home/travis/virtualenv/python2.7/lib/python2.7/site-packages/dja
 sed -i "s/from django.test import TestCase/from django.test import TestCase\nfrom django.test.testcases import skipIfDBFeature/" /home/travis/virtualenv/python2.7/lib/python2.7/site-packages/django/contrib/auth/tests/tokens.py
 #echo 'from django.test.testcases import skipIfDBFeature' | cat - /home/travis/virtualenv/python2.7/lib/python2.7/site-packages/django/contrib/auth/tests/tokens.py > temp && mv temp /home/travis/virtualenv/python2.7/lib/python2.7/site-packages/django/contrib/auth/tests/tokens.py
 sed -i "s/def test_10265(self):/@skipIfDBFeature('supports_transactions')\n    def test_10265(self):/" /home/travis/virtualenv/python2.7/lib/python2.7/site-packages/django/contrib/auth/tests/tokens.py
+
+sudo chmod 777 /home/travis/virtualenv/python2.7/local/lib/python2.7/site-packages/django/contrib/auth/tests/management.py
+sed -i "s/from django.utils.six import StringIO/from django.utils.six import StringIO\nfrom django.test.testcases import skipIfDBFeature/" /home/travis/virtualenv/python2.7/local/lib/python2.7/site-packages/django/contrib/auth/tests/management.py
+#echo 'from django.test.testcases import skipIfDBFeature' | cat - /home/travis/virtualenv/python2.7/lib/python2.7/site-packages/django/contrib/auth/tests/tokens.py > temp && mv temp /home/travis/virtualenv/python2.7/lib/python2.7/site-packages/django/contrib/auth/tests/tokens.py
+sed -i "s/def test_swappable_user(self):/@skipIfDBFeature('supports_transactions')\n    def test_swappable_user(self):/" /home/travis/virtualenv/python2.7/local/lib/python2.7/site-packages/django/contrib/auth/tests/management.py
