@@ -10,11 +10,17 @@ sed -i "s/'HOST': '',/'HOST': 'localhost',/" settings.py
 sed -i "s/'PORT': '',/'PORT': '48004',/" settings.py
 sed -i "s/USE_TZ = True/USE_TZ = False/" settings.py
 
+#Changing the manage path
+cd /tmp/nuodb_site
+sed -i "s#/usr/bin/env python#/home/travis/virtualenv/python2.7/bin/env python#" manage.py
+
+export PYTHONPATH=/home/travis/virtualenv/python2.7/lib/python2.7/site-packages/django/
+
 #Skipping unsupported tests
-sudo chmod 777 /home/travis/virtualenv/python2.7/dist-packages/django/contrib/sessions/tests.py
-sed -i '1s/^/from django.test.testcases import skipIfDBFeature\n/' /usr/local/lib/python2.7/dist-packages/django/contrib/sessions/tests.py
-sed -i "s/@override_settings(USE_TZ=True)/#@override_settings(USE_TZ=True)/" /home/travis/virtualenv/python2.7/dist-packages/django/contrib/sessions/tests.py
-sed -i "s/@override_settings(USE_TZ=True)/#@override_settings(USE_TZ=True)/" /home/travis/virtualenv/python2.7/dist-packages/django/contrib/sessions/tests.py
+sudo chmod 777 /home/travis/virtualenv/python2.7/site-packages/django/contrib/sessions/tests.py
+sed -i '1s/^/from django.test.testcases import skipIfDBFeature\n/' /usr/local/lib/python2.7/site-packages/django/contrib/sessions/tests.py
+sed -i "s/@override_settings(USE_TZ=True)/#@override_settings(USE_TZ=True)/" /home/travis/virtualenv/python2.7/site-packages/django/contrib/sessions/tests.py
+sed -i "s/@override_settings(USE_TZ=True)/#@override_settings(USE_TZ=True)/" /home/travis/virtualenv/python2.7/site-packages/django/contrib/sessions/tests.py
 
 # sudo chmod 777 /usr/local/lib/python2.7/dist-packages/django/contrib/sites/tests.py
 # sed -i '1s/^/from django.test.testcases import skipIfDBFeature\n/' /usr/local/lib/python2.7/dist-packages/django/contrib/sites/tests.py
@@ -33,12 +39,6 @@ sed -i "s/@override_settings(USE_TZ=True)/#@override_settings(USE_TZ=True)/" /ho
 # sed -i '1s/^/from django.test.testcases import skipIfDBFeature\n/' /usr/local/lib/python2.7/dist-packages/django/contrib/auth/tests/tokens.py
 # sed -i "s/def test_10265(self):/@skipIfDBFeature('supports_transactions')\n    def test_10265(self):/" /usr/local/lib/python2.7/dist-packages/django/contrib/auth/tests/tokens.py
 
-
-#Changing the manage path
-cd /tmp/nuodb_site
-sed -i "s#/usr/bin/env python#/home/travis/virtualenv/python2.7/bin/env python#" manage.py
-
-export PYTHONPATH=/home/travis/virtualenv/python2.7/lib/python2.7/site-packages/django/
 
 cd /tmp/nuodb_site
 yes | python manage.py syncdb
