@@ -19,20 +19,14 @@ export PYTHONPATH=/home/travis/virtualenv/python2.7/lib/python2.7/site-packages/
 cd /tmp/nuodb_site
 yes | python manage.py syncdb
 
-cd /home/travis/virtualenv/python2.7/site-packages && ls
-
-cd /home/travis/virtualenv/python2.7/dist-packages && ls
-
-cd /home/travis/virtualenv/python2.7/site-packages/django && ls
-
-cd /home/travis/virtualenv/python2.7/dist-packages/django && ls
-
+cd /home/travis/virtualenv/python2.7/lib/python2.7/site-packages/django && localhost
+cd /home/travis/virtualenv/python2.7/lib/python2.7/dist-packages/django && localhost
 
 #Skipping unsupported tests
-sudo chmod 777 /home/travis/virtualenv/python2.7/site-packages/django/contrib/sessions/tests.py
-sed -i '1s/^/from django.test.testcases import skipIfDBFeature\n/' /usr/local/lib/python2.7/site-packages/django/contrib/sessions/tests.py
-sed -i "s/@override_settings(USE_TZ=True)/#@override_settings(USE_TZ=True)/" /home/travis/virtualenv/python2.7/site-packages/django/contrib/sessions/tests.py
-sed -i "s/@override_settings(USE_TZ=True)/#@override_settings(USE_TZ=True)/" /home/travis/virtualenv/python2.7/site-packages/django/contrib/sessions/tests.py
+sudo chmod 777 /home/travis/virtualenv/python2.7/lib/python2.7/site-packages/django/contrib/sessions/tests.py
+sed -i '1s/^/from django.test.testcases import skipIfDBFeature\n/' /usr/local/lib/python2.7/lib/python2.7/site-packages/django/contrib/sessions/tests.py
+sed -i "s/@override_settings(USE_TZ=True)/#@override_settings(USE_TZ=True)/" /home/travis/virtualenv/python2.7/lib/python2.7/site-packages/django/contrib/sessions/tests.py
+sed -i "s/@override_settings(USE_TZ=True)/#@override_settings(USE_TZ=True)/" /home/travis/virtualenv/python2.7/lib/python2.7/site-packages/django/contrib/sessions/tests.py
 
 # sudo chmod 777 /usr/local/lib/python2.7/dist-packages/django/contrib/sites/tests.py
 # sed -i '1s/^/from django.test.testcases import skipIfDBFeature\n/' /usr/local/lib/python2.7/dist-packages/django/contrib/sites/tests.py
