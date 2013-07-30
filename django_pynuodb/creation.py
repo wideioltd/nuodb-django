@@ -292,8 +292,8 @@ class DatabaseCreation(BaseDatabaseCreation):
             if test_database_name not in [db.name for db in domain.databases]:
                 peer = domain.entry_peer
                 archive = os.path.join(tempfile.gettempdir(), ''.join(random.choice(string.ascii_uppercase + string.digits) for x in range(20)))
-                peer.startStorageManager(test_database_name, archive, True, waitSeconds=10)
-                peer.startTransactionEngine(test_database_name,  [('--dba-user', DBA_USER),('--dba-password', DBA_PASSWORD)], waitSeconds=10)
+                peer.start_storage_manager(test_database_name, archive, True, wait_seconds=10)
+                peer.start_transaction_engine(test_database_name,  [('--dba-user', DBA_USER),('--dba-password', DBA_PASSWORD)], wait_seconds=10)
             return test_database_name
         finally:
             domain.disconnect()
