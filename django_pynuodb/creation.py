@@ -290,7 +290,7 @@ class DatabaseCreation(BaseDatabaseCreation):
         try:
             test_database_name = self._get_test_db_name()
             if test_database_name not in [db.name for db in domain.databases]:
-                peer = domain.getEntryPeer()
+                peer = domain.entry_peer
                 archive = os.path.join(tempfile.gettempdir(), ''.join(random.choice(string.ascii_uppercase + string.digits) for x in range(20)))
                 peer.startStorageManager(test_database_name, archive, True, waitSeconds=10)
                 peer.startTransactionEngine(test_database_name,  [('--dba-user', DBA_USER),('--dba-password', DBA_PASSWORD)], waitSeconds=10)
