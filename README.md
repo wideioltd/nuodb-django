@@ -1,5 +1,7 @@
 # NuoDB - Django
 
+[![Build Status](https://travis-ci.org/nuodb/nuodb-django.png?branch=master)](https://travis-ci.org/nuodb/nuodb-django)
+
 This is the official Django adapter for [NuoDB](http://www.nuodb.com). It leverages the [NuoDB Python Driver](https://github.com/nuodb/nuodb-python).
 
 ### Requirements
