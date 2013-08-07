@@ -27,10 +27,11 @@ before_install:
   - sudo chmod 777 django_tests.sh
 
 before_script:
-  - ${NUODB_ROOT}/bin/nuodb --chorus test --password bar --dba-user dba --dba-password goalie --verbose debug --archive /var/tmp/nuodb --initialize --force &
+  - ${NUODB_ROOT}/bin/nuodb --chorus test --password bar --dba-user dba --dba-password baz --verbose debug --archive /var/tmp/nuodb --initialize --force &
   - sleep 2
-  - ${NUODB_ROOT}/bin/nuodb --chorus test --password bar --dba-user dba --dba-password goalie &
+  - ${NUODB_ROOT}/bin/nuodb --chorus test --password bar --dba-user dba --dba-password baz &
   - sleep 2
+  - echo "create user cloud password 'user';" | ${NUODB_ROOT}/bin/nuosql test@localhost --user dba --password baz
 
 script:
   - ./django_tests.sh
