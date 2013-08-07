@@ -14,14 +14,6 @@ from django.db.utils import load_backend
 from django.db.backends.creation import BaseDatabaseCreation
 from django.db.backends.util import truncate_name
 
-HOST            = "localhost"
-DOMAIN_USER     = "domain"
-DOMAIN_PASSWORD = "bird"
-
-DBA_USER        = 'dba'
-DBA_PASSWORD    = 'goalie'
-DATABASE_NAME   = 'test_test'
-
 class DatabaseCreation(BaseDatabaseCreation):
     # This dictionary maps Field objects to their associated PostgreSQL column
     # types, as strings. Column-type strings can contain format strings; they'll
@@ -286,14 +278,14 @@ class DatabaseCreation(BaseDatabaseCreation):
         """
         Internal implementation - creates the test db tables.
         """
-        domain = pynuodb.entity.Domain(HOST, DOMAIN_USER, DOMAIN_PASSWORD)
+        domain = pynuodb.entity.Domain(self.connection.settings_dict['HOST'], self.connection.settings_dict['USER'], self.connection.settings_dict['PASSWORD'])
         try:
             test_database_name = self._get_test_db_name()
             if test_database_name not in [db.name for db in domain.databases]:
                 peer = domain.entry_peer
                 archive = os.path.join(tempfile.gettempdir(), ''.join(random.choice(string.ascii_uppercase + string.digits) for x in range(20)))
                 peer.start_storage_manager(test_database_name, archive, True, wait_seconds=10)
-                peer.start_transaction_engine(test_database_name,  [('--dba-user', DBA_USER),('--dba-password', DBA_PASSWORD)], wait_seconds=10)
+                peer.start_transaction_engine(test_database_name,  [('--dba-user', self.connection.settings_dict['USER']),('--dba-password', self.connection.settings_dict['PASSWORD'])], wait_seconds=10)
             return test_database_name
         finally:
             domain.disconnect()
@@ -331,7 +323,7 @@ class DatabaseCreation(BaseDatabaseCreation):
         Internal implementation - remove the test db tables.
         """
         listener = TestDomainListener()
-        domain = pynuodb.entity.Domain(HOST, DOMAIN_USER, DOMAIN_PASSWORD, listener)
+        domain = pynuodb.entity.Domain(self.connection.settings_dict['HOST'], self.connection.settings_dict['USER'], self.connection.settings_dict['PASSWORD'], listener)
         try:
             database = domain.get_database(test_database_name)
             if database is not None:
