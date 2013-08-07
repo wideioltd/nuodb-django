@@ -9,8 +9,8 @@ class DatabaseClient(BaseDatabaseClient):
     def runshell(self):
         settings_dict = self.connection.settings_dict
         args = [self.executable_name]
-        if settings_dict['USER']:
-            args += ["-U", settings_dict['USER']]
+        if settings_dict['DBA_USER']:
+            args += ["-U", settings_dict['DBA_USER']]
         if settings_dict['HOST']:
             args.extend(["-h", settings_dict['HOST']])
         if settings_dict['PORT']:

@@ -165,10 +165,10 @@ class DatabaseWrapper(BaseDatabaseWrapper):
             else:
                 options = {"schema": "user"}
             
-            if settings_dict['USER']:
-                conn_params['user'] = settings_dict['USER']
-            if settings_dict['PASSWORD']:
-                conn_params['password'] = force_str(settings_dict['PASSWORD'])
+            if settings_dict['DBA_USER']:
+                conn_params['user'] = settings_dict['DBA_USER']
+            if settings_dict['DBA_PASSWORD']:
+                conn_params['password'] = force_str(settings_dict['DBA_PASSWORD'])
             if settings_dict['HOST']:
                 conn_params['host'] = settings_dict['HOST']
             if settings_dict['PORT']:
