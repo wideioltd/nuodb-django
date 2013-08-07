@@ -8,7 +8,7 @@ This is the official Django adapter for [NuoDB](http://www.nuodb.com). It levera
 
 If you haven't already, [Download and Install NuoDB](http://nuodb.com/download-nuodb/)
 
-In the settings.py file in your project, set the `USE_TZ` flag to False. This is done because the timezone is detected when the connection is created.
+In the settings.py file in your project, set the `USE_TZ` flag to False. This is done because the timezone is detected when the connection is created. 
 
 Set the `ENGINE` field in the `DATABASES/default` dictionary in settings.py to the django_pynuodb folder (if you installed using pip this is just `django_pynuodb`)
 
@@ -31,10 +31,12 @@ Here is a sample database dictionary
 DATABASES = {
     'default': {
         'ENGINE': 'django_pynuodb',                                                                                                      
-        'NAME': 'test',                                                                                                                                                                                                                                                                                                    
-        'USER': 'dba',
+        'NAME': 'test',                                                                                                                                                                                                           
+        'DOMAIN_USER': 'domain',        # domain credentials
+        'DOMAIN_PASSWORD': 'bird',                                                                     
+        'DBA_USER': 'dba',	 			# database credentials
+        'DBA_PASSWORD': 'goalie',
         'SCHEMA': '',  					# optional
-        'PASSWORD': 'goalie',
         'HOST': 'localhost',                                                                                            
         'PORT': '48004',                                                                                                                                                      
     }
