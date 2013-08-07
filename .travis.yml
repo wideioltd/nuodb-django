@@ -27,7 +27,6 @@ before_install:
   - sudo chmod 777 django_tests.sh
 
 before_script:
-  - ./change_settings.sh
   - ${NUODB_ROOT}/bin/nuodb --chorus test --password bar --dba-user dba --dba-password baz --verbose debug --archive /var/tmp/nuodb --initialize --force &
   - sleep 2
   - ${NUODB_ROOT}/bin/nuodb --chorus test --password bar --dba-user dba --dba-password baz &
