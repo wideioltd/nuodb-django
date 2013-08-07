@@ -31,7 +31,6 @@ before_script:
   - sleep 2
   - ${NUODB_ROOT}/bin/nuodb --chorus test --password bar --dba-user dba --dba-password goalie &
   - sleep 2
-  - echo "create user cloud password 'user';" | ${NUODB_ROOT}/bin/nuosql test@localhost --user dba --password goalie
 
 script:
   - ./django_tests.sh
