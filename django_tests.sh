@@ -1,3 +1,21 @@
+cd /tmp
+django-admin.py startproject nuodb_site
+cd /tmp/nuodb_site/nuodb_site
+sed -i "s/'ENGINE': 'django.db.backends.',/'ENGINE': 'django_pynuodb',/" settings.py
+sed -i "s/'NAME': '',/'DBA_USER': 'dba',/" settings.py
+sed -i "s/'USER': '',/'SCHEMA': 'django',/" settings.py
+sed -i "s/'PASSWORD': '',/'DBA_PASSWORD': 'goalie',/" settings.py
+sed -i "s/'HOST': '',/'HOST': 'localhost',/" settings.py
+sed -i "s/'PORT': '',/'PORT': '48004',/" settings.py
+
+sed -i "s/'PORT': '48004',/'PORT': '48004',\n    'NAME': 'test',/" settings.py
+sed -i "s/'PORT': '48004',/'PORT': '48004',\n    'DOMAIN_USER': 'domain',/" settings.py
+sed -i "s/'PORT': '48004',/'PORT': '48004',\n    'DOMAIN_PASSWORD': 'bird',/" settings.py
+
+
+sed -i "s/USE_TZ = True/USE_TZ = False/" settings.py
+
+
 #Changing the manage path
 cd /tmp/nuodb_site
 sed -i "s#/usr/bin/env python#/home/travis/virtualenv/python2.7/bin/env python#" manage.py
