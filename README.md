@@ -16,6 +16,8 @@ You can optionally set the schema by adding a `SCHEMA` field in the `DATABASES/d
 
 ### Setup
 
+git clone and install it 
+
 ```
 git clone https://github.com/nuodb/nuodb-django.git
 cd nuodb-django
