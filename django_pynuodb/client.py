@@ -4,7 +4,7 @@ import sys
 from django.db.backends import BaseDatabaseClient
 
 class DatabaseClient(BaseDatabaseClient):
-    executable_name = 'psql'
+    executable_name = 'nuosql'
 
     def runshell(self):
         settings_dict = self.connection.settings_dict

@@ -15,7 +15,7 @@ from django.db.backends.creation import BaseDatabaseCreation
 from django.db.backends.util import truncate_name
 
 class DatabaseCreation(BaseDatabaseCreation):
-    # This dictionary maps Field objects to their associated PostgreSQL column
+    # This dictionary maps Field objects to their associated NuoDB column
     # types, as strings. Column-type strings can contain format strings; they'll
     # be interpolated against the values of Field.__dict__ before being output.
     # If a column type is set to None, it won't be included in the output.
