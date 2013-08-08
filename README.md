@@ -16,12 +16,17 @@ You can optionally set the schema by adding a `SCHEMA` field in the `DATABASES/d
 
 ### Setup
 
-1 - git clone https://github.com/nuodb/nuodb-django.git
+```
+git clone https://github.com/nuodb/nuodb-django.git
+cd nuodb-django
+python setup.py install
+```
 
 or install with pip
 
-2 - pip install django_pynuodb
-
+```
+sudo pip install django_pynuodb
+```
 
 ### Sample
 
