@@ -33,12 +33,12 @@ DATABASES = {
         'ENGINE': 'django_pynuodb',
         'NAME': 'test',
         'DOMAIN_USER': 'domain',                        # domain credentials
-        'DOMAIN_PASSWORD': 'bird',                                                                     
+        'DOMAIN_PASSWORD': 'bird',
         'DBA_USER': 'dba',	 			# database credentials
         'DBA_PASSWORD': 'goalie',
         'SCHEMA': '',  					# optional
-        'HOST': 'localhost',                                                                                            
-        'PORT': '48004',                                                                                                                                                      
+        'HOST': 'localhost',
+        'PORT': '48004',
     }
 }
 ```
