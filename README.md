@@ -51,4 +51,4 @@ USE_TZ = False
 
 ### License
 
-[NuoDB License](https://github.com/nuodb/nuodb-drivers/blob/master/LICENSE)
+[NuoDB License](https://github.com/nuodb/nuodb-django/blob/master/LICENSE)
