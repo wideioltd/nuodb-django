@@ -33,8 +33,6 @@ class DatabaseIntrospection(BaseDatabaseIntrospection):
 
     def get_table_description(self, cursor, table_name):
         "Returns a description of the table, with the DB-API cursor.description interface."
-        # As cursor.description does not return reliably the nullable property,
-        # we have to query the information_schema (#7783)
         print 'get_table_description'
         cursor.execute("""
             SELECT column_name, is_nullable

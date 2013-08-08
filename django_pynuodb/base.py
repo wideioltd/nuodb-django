@@ -120,7 +120,6 @@ class DatabaseWrapper(BaseDatabaseWrapper):
         self._nuodb_version = None
 
     def close(self):
-#         self.validate_thread_sharing()
         if self.connection is None:
             return
 
@@ -181,7 +180,6 @@ class DatabaseWrapper(BaseDatabaseWrapper):
                 try:
                     get_parameter_status = self.connection.get_parameter_status
                 except AttributeError:
-                    # pynuodb < 2.0.12 doesn't have get_parameter_status
                     conn_tz = None
                 else:
                     conn_tz = get_parameter_status('TimeZone')
