@@ -27,7 +27,10 @@ class DatabaseIntrospection(BaseDatabaseIntrospection):
         
     def get_table_list(self, cursor):
         "Returns a list of table names in the current database."
-        cursor.execute(str("SELECT tablename FROM system.tables"))
+        if self.connection.settings_dict.has_key('SCHEMA'):
+            cursor.execute(str("SELECT tablename FROM system.tables WHERE schema='%s'" % self.connection.settings_dict['SCHEMA']))
+        else:
+            cursor.execute(str("SELECT tablename FROM system.tables WHERE schema='USER'"))
         results = [row[0] for row in cursor.fetchall()]
         return results
 
