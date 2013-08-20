@@ -44,7 +44,7 @@ Steps:
 $NUODB_HOME/bin/nuodb-migrator dump --source.driver=org.postgresql.Driver --source.url=jdbc:postgresql://localhost/test --source.username=postgres --output.type=csv --output.path=/tmp/dump.cat
 ```
 
-2) From you Django app configured to use NuoDB (for an example of this look in the [Sample](#Sample) section below.) perform a syncdb.
+2) From your Django app configured to use NuoDB (for an example of this look in the Sample section below.) perform a syncdb.
 
 ```
 python manage.py syncdb
