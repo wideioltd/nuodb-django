@@ -28,6 +28,7 @@ before_script:
   - echo "create user cloud password 'user';" | ${NUODB_HOME}/bin/nuosql test@localhost --user dba --password baz
 
 script:
+  - make all
   - ./django_tests.sh
   - cd /tmp/nuodb_site
   - python manage.py test
