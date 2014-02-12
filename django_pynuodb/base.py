@@ -160,7 +160,7 @@ class DatabaseWrapper(BaseDatabaseWrapper):
                 del conn_params['autocommit']
             
             if settings_dict.has_key('SCHEMA'):
-                options = {"schema": settings_dict['SCHEMA']}
+                options = {"schema": settings_dict.get('SCHEMA', 'user') or 'user'}
             else:
                 options = {"schema": "user"}
             
