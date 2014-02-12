@@ -51,9 +51,10 @@ class DatabaseOperations(BaseDatabaseOperations):
 
         return lookup
 
-    def field_cast_sql(self, db_type):
-        if db_type == 'inet':
-            return 'HOST(%s)'
+    def field_cast_sql(self, *args):
+        for arg in args:
+            if arg == "inet" or arg == "GenericIPAddressField" or arg == "IPAddressField":
+                return 'HOST(%s)'
         return '%s'
 
     def last_insert_id(self, cursor, table_name, pk_name):
