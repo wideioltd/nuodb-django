@@ -119,6 +119,8 @@ class DatabaseWrapper(BaseDatabaseWrapper):
         self.validation = BaseDatabaseValidation(self)
         self._nuodb_version = None
 
+        self.Database = Database
+
     def close(self):
         if self.connection is None:
             return
@@ -210,3 +212,16 @@ class DatabaseWrapper(BaseDatabaseWrapper):
                 return self.connection.commit()
             except Database.IntegrityError as e:
                 six.reraise(utils.IntegrityError, utils.IntegrityError(*tuple(e.args)), sys.exc_info()[2])
+
+    def get_connection_params(self):
+        return {}
+ 
+    def get_new_connection(self, conn_params):
+        return self.Database.connect(**conn_params)
+
+    def init_connection_state(self):
+        pass
+
+    def _set_autocommit(self, autocommit):
+        pass
+
