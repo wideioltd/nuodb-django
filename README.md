@@ -6,6 +6,8 @@ This is the official Django adapter for [NuoDB](http://www.nuodb.com). It levera
 
 ### Requirements
 
+The django version we currently support is django 1.5.
+
 If you haven't already, [Download and Install NuoDB](http://nuodb.com/download-nuodb/)
 
 In the settings.py file in your project, set the `USE_TZ` flag to False. This is done because the timezone is detected when the connection is created. 
