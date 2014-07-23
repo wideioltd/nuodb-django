@@ -6,7 +6,7 @@ This is the official Django adapter for [NuoDB](http://www.nuodb.com). It levera
 
 ### Requirements
 
-The Django version we currently support is django 1.5.
+The Django version we currently support is Django 1.5.
 
 If you haven't already, [Download and Install NuoDB](http://nuodb.com/download-nuodb/)
 
